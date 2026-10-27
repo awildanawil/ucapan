@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Rewrite for /u/{kode} -> ucapan.php?kode={kode}
+    RewriteRule ^u/([a-zA-Z0-9_-]+)/?$ ucapan.php?kode=$1 [L,QSA]
+
+    # Rewrite for /e/{kode}/{token} -> edit.php?kode={kode}&token={token}
+    RewriteRule ^e/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ edit.php?kode=$1&token=$2 [L,QSA]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent viewing of sensitive files
+<FilesMatch "(\.sql|\.env|\.log|config\.inc\.php)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Disable directory browsing
+Options -Indexes
